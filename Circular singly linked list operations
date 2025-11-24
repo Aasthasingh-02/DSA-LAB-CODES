@@ -1,0 +1,111 @@
+// Program 9: Circular singly linked list operations
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *next;
+};
+
+struct Node *last = NULL;   // points to last node
+
+struct Node* createNode(int x) {
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n->data = x;
+    n->next = NULL;
+    return n;
+}
+
+void insertEnd(int x) {
+    struct Node *n = createNode(x);
+    if (last == NULL) {
+        last = n;
+        last->next = last;
+    } else {
+        n->next = last->next;
+        last->next = n;
+        last = n;
+    }
+}
+
+void deleteValue(int x) {
+    if (last == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    struct Node *curr = last->next;
+    struct Node *prev = last;
+
+    // search
+    do {
+        if (curr->data == x)
+            break;
+        prev = curr;
+        curr = curr->next;
+    } while (curr != last->next);
+
+    if (curr->data != x) {
+        printf("Value not found\n");
+        return;
+    }
+
+    // only one node
+    if (curr == last && curr->next == last) {
+        last = NULL;
+    } else {
+        prev->next = curr->next;
+        if (curr == last)
+            last = prev;
+    }
+    free(curr);
+    printf("Deleted %d\n", x);
+}
+
+void display() {
+    if (last == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    struct Node *temp = last->next;
+    printf("Circular List: ");
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != last->next);
+    printf("\n");
+}
+
+int main() {
+    int choice, x;
+
+    while (1) {
+        printf("\n--- CIRCULAR LINKED LIST ---\n");
+        printf("1. Insert at end\n");
+        printf("2. Delete by value\n");
+        printf("3. Display\n");
+        printf("4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter value: ");
+            scanf("%d", &x);
+            insertEnd(x);
+            break;
+        case 2:
+            printf("Enter value to delete: ");
+            scanf("%d", &x);
+            deleteValue(x);
+            break;
+        case 3:
+            display();
+            break;
+        case 4:
+            return 0;
+        default:
+            printf("Invalid choice\n");
+        }
+    }
+}
