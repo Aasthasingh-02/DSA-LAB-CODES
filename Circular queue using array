@@ -1,0 +1,81 @@
+// Program 5(c): Circular queue using array
+
+#include <stdio.h>
+#define MAX 5   // small size to easily see circular behavior
+
+int cq[MAX];
+int front = -1, rear = -1;
+
+int isFull() {
+    return (front == 0 && rear == MAX - 1) || (front == rear + 1);
+}
+
+int isEmpty() {
+    return front == -1;
+}
+
+void enqueue(int x) {
+    if (isFull()) {
+        printf("Circular Queue Overflow!\n");
+        return;
+    }
+    if (front == -1) front = 0;
+    rear = (rear + 1) % MAX;
+    cq[rear] = x;
+    printf("Enqueued %d\n", x);
+}
+
+void dequeue() {
+    if (isEmpty()) {
+        printf("Circular Queue Underflow!\n");
+        return;
+    }
+    printf("Dequeued %d\n", cq[front]);
+    if (front == rear)
+        front = rear = -1;
+    else
+        front = (front + 1) % MAX;
+}
+
+void displayCQ() {
+    int i;
+    if (isEmpty()) {
+        printf("Circular Queue is empty!\n");
+        return;
+    }
+    printf("Circular Queue elements: ");
+    i = front;
+    while (1) {
+        printf("%d ", cq[i]);
+        if (i == rear) break;
+        i = (i + 1) % MAX;
+    }
+    printf("\n");
+}
+
+int main() {
+    int choice, x;
+    while (1) {
+        printf("\n--- CIRCULAR QUEUE MENU ---\n");
+        printf("1. Enqueue\n2. Dequeue\n3. Display\n4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+        case 1:
+            printf("Enter value: ");
+            scanf("%d", &x);
+            enqueue(x);
+            break;
+        case 2:
+            dequeue();
+            break;
+        case 3:
+            displayCQ();
+            break;
+        case 4:
+            return 0;
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+}
