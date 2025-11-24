@@ -1,0 +1,104 @@
+// Program 2: Matrix operations - sum, subtraction, product, transpose
+
+#include <stdio.h>
+
+#define MAX 10
+
+void inputMatrix(int a[MAX][MAX], int r, int c) {
+    int i, j;
+    printf("Enter elements (%d x %d):\n", r, c);
+    for (i = 0; i < r; i++)
+        for (j = 0; j < c; j++)
+            scanf("%d", &a[i][j]);
+}
+
+void printMatrix(int a[MAX][MAX], int r, int c) {
+    int i, j;
+    for (i = 0; i < r; i++) {
+        for (j = 0; j < c; j++)
+            printf("%d ", a[i][j]);
+        printf("\n");
+    }
+}
+
+int main() {
+    int a[MAX][MAX], b[MAX][MAX], res[MAX][MAX];
+    int r1, c1, r2, c2;
+    int i, j, k, choice;
+
+    while (1) {
+        printf("\n--- MATRIX MENU ---\n");
+        printf("1. Sum of two matrices\n");
+        printf("2. Subtraction of two matrices\n");
+        printf("3. Product of two matrices\n");
+        printf("4. Transpose of a matrix\n");
+        printf("5. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        if (choice == 5) break;
+
+        switch (choice) {
+        case 1:
+        case 2:
+            printf("Enter rows and cols of matrices: ");
+            scanf("%d%d", &r1, &c1);
+            r2 = r1; c2 = c1;
+            printf("Matrix A:\n");
+            inputMatrix(a, r1, c1);
+            printf("Matrix B:\n");
+            inputMatrix(b, r2, c2);
+            for (i = 0; i < r1; i++) {
+                for (j = 0; j < c1; j++) {
+                    if (choice == 1)
+                        res[i][j] = a[i][j] + b[i][j];
+                    else
+                        res[i][j] = a[i][j] - b[i][j];
+                }
+            }
+            printf("Result:\n");
+            printMatrix(res, r1, c1);
+            break;
+
+        case 3:
+            printf("Enter rows and cols of Matrix A: ");
+            scanf("%d%d", &r1, &c1);
+            printf("Enter rows and cols of Matrix B: ");
+            scanf("%d%d", &r2, &c2);
+            if (c1 != r2) {
+                printf("Matrix multiplication not possible!\n");
+                break;
+            }
+            printf("Matrix A:\n");
+            inputMatrix(a, r1, c1);
+            printf("Matrix B:\n");
+            inputMatrix(b, r2, c2);
+            for (i = 0; i < r1; i++)
+                for (j = 0; j < c2; j++) {
+                    res[i][j] = 0;
+                    for (k = 0; k < c1; k++)
+                        res[i][j] += a[i][k] * b[k][j];
+                }
+            printf("Product matrix:\n");
+            printMatrix(res, r1, c2);
+            break;
+
+        case 4:
+            printf("Enter rows and cols of matrix: ");
+            scanf("%d%d", &r1, &c1);
+            inputMatrix(a, r1, c1);
+            printf("Transpose:\n");
+            for (i = 0; i < c1; i++) {
+                for (j = 0; j < r1; j++)
+                    printf("%d ", a[j][i]);
+                printf("\n");
+            }
+            break;
+
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
