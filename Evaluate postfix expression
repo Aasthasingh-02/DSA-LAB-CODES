@@ -1,0 +1,54 @@
+// Program 6: Evaluate postfix expression
+
+#include <stdio.h>
+#include <ctype.h>
+
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+void push(int x) {
+    stack[++top] = x;
+}
+
+int pop() {
+    return stack[top--];
+}
+
+int main() {
+    char exp[MAX];
+    int i;
+    int a, b, res;
+
+    printf("Enter postfix expression (single-digit operands, no spaces): ");
+    scanf("%s", exp);
+
+    for (i = 0; exp[i] != '\0'; i++) {
+        if (isdigit(exp[i])) {
+            push(exp[i] - '0'); // convert char to int
+        } else {
+            b = pop();
+            a = pop();
+            switch (exp[i]) {
+            case '+': res = a + b; break;
+            case '-': res = a - b; break;
+            case '*': res = a * b; break;
+            case '/': res = a / b; break;
+            case '^': {
+                int p = 1, j;
+                for (j = 0; j < b; j++) p *= a;
+                res = p;
+                break;
+            }
+            default:
+                printf("Invalid operator %c\n", exp[i]);
+                return 0;
+            }
+            push(res);
+        }
+    }
+
+    printf("Result = %d\n", pop());
+    return 0;
+}
