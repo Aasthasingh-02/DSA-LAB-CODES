@@ -1,0 +1,99 @@
+// Program 14: BST insertion and deletion
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node *left, *right;
+};
+
+struct Node* createNode(int x) {
+    struct Node *n = (struct Node *)malloc(sizeof(struct Node));
+    n->data = x;
+    n->left = n->right = NULL;
+    return n;
+}
+
+struct Node* insert(struct Node *root, int x) {
+    if (root == NULL)
+        return createNode(x);
+    if (x < root->data)
+        root->left = insert(root->left, x);
+    else if (x > root->data)
+        root->right = insert(root->right, x);
+    return root;
+}
+
+struct Node* findMin(struct Node *root) {
+    while (root->left != NULL)
+        root = root->left;
+    return root;
+}
+
+struct Node* deleteNode(struct Node *root, int x) {
+    if (root == NULL) return NULL;
+
+    if (x < root->data)
+        root->left = deleteNode(root->left, x);
+    else if (x > root->data)
+        root->right = deleteNode(root->right, x);
+    else {
+        // node found
+        if (root->left == NULL) {
+            struct Node *temp = root->right;
+            free(root);
+            return temp;
+        } else if (root->right == NULL) {
+            struct Node *temp = root->left;
+            free(root);
+            return temp;
+        } else {
+            struct Node *temp = findMin(root->right);
+            root->data = temp->data;
+            root->right = deleteNode(root->right, temp->data);
+        }
+    }
+    return root;
+}
+
+void inorder(struct Node *root) {
+    if (root == NULL) return;
+    inorder(root->left);
+    printf("%d ", root->data);
+    inorder(root->right);
+}
+
+int main() {
+    struct Node *root = NULL;
+    int choice, x;
+
+    while (1) {
+        printf("\n--- BINARY SEARCH TREE ---\n");
+        printf("1. Insert\n2. Delete\n3. Display (Inorder)\n4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter value to insert: ");
+            scanf("%d", &x);
+            root = insert(root, x);
+            break;
+        case 2:
+            printf("Enter value to delete: ");
+            scanf("%d", &x);
+            root = deleteNode(root, x);
+            break;
+        case 3:
+            printf("Inorder traversal: ");
+            inorder(root);
+            printf("\n");
+            break;
+        case 4:
+            return 0;
+        default:
+            printf("Invalid choice\n");
+        }
+    }
+}
