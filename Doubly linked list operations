@@ -1,0 +1,100 @@
+// Program 12: Doubly linked list operations
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct DNode {
+    int data;
+    struct DNode *prev;
+    struct DNode *next;
+};
+
+struct DNode *head = NULL;
+
+struct DNode* createNode(int x) {
+    struct DNode *n = (struct DNode *)malloc(sizeof(struct DNode));
+    n->data = x;
+    n->prev = n->next = NULL;
+    return n;
+}
+
+void insertEnd(int x) {
+    struct DNode *n = createNode(x);
+    if (head == NULL) {
+        head = n;
+        return;
+    }
+    struct DNode *temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = n;
+    n->prev = temp;
+}
+
+void deleteValue(int x) {
+    struct DNode *temp = head;
+    while (temp != NULL && temp->data != x)
+        temp = temp->next;
+    if (temp == NULL) {
+        printf("Value not found\n");
+        return;
+    }
+    if (temp->prev != NULL)
+        temp->prev->next = temp->next;
+    else
+        head = temp->next;      // deleting first node
+
+    if (temp->next != NULL)
+        temp->next->prev = temp->prev;
+
+    free(temp);
+    printf("Deleted %d\n", x);
+}
+
+void displayForward() {
+    struct DNode *temp = head;
+    if (temp == NULL) {
+        printf("List is empty\n");
+        return;
+    }
+    printf("Doubly List (forward): ");
+    while (temp != NULL) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    int choice, x;
+
+    while (1) {
+        printf("\n--- DOUBLY LINKED LIST ---\n");
+        printf("1. Insert at end\n");
+        printf("2. Delete by value\n");
+        printf("3. Display (forward)\n");
+        printf("4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            printf("Enter value: ");
+            scanf("%d", &x);
+            insertEnd(x);
+            break;
+        case 2:
+            printf("Enter value to delete: ");
+            scanf("%d", &x);
+            deleteValue(x);
+            break;
+        case 3:
+            displayForward();
+            break;
+        case 4:
+            return 0;
+        default:
+            printf("Invalid choice\n");
+        }
+    }
+}
