@@ -1,0 +1,77 @@
+// Program 1: List operations using array (insertion, deletion, display)
+
+#include <stdio.h>
+
+#define MAX 100
+
+int main() {
+    int arr[MAX];
+    int n = 0; // current size
+    int choice, pos, val, i;
+
+    while (1) {
+        printf("\n--- LIST MENU ---\n");
+        printf("1. Insert element\n");
+        printf("2. Delete element\n");
+        printf("3. Display list\n");
+        printf("4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+        case 1:
+            if (n == MAX) {
+                printf("List is full!\n");
+                break;
+            }
+            printf("Enter value to insert: ");
+            scanf("%d", &val);
+            printf("Enter position (0 to %d): ", n);
+            scanf("%d", &pos);
+            if (pos < 0 || pos > n) {
+                printf("Invalid position!\n");
+                break;
+            }
+            for (i = n; i > pos; i--)
+                arr[i] = arr[i - 1];
+            arr[pos] = val;
+            n++;
+            printf("Element inserted.\n");
+            break;
+
+        case 2:
+            if (n == 0) {
+                printf("List is empty!\n");
+                break;
+            }
+            printf("Enter position to delete (0 to %d): ", n - 1);
+            scanf("%d", &pos);
+            if (pos < 0 || pos >= n) {
+                printf("Invalid position!\n");
+                break;
+            }
+            for (i = pos; i < n - 1; i++)
+                arr[i] = arr[i + 1];
+            n--;
+            printf("Element deleted.\n");
+            break;
+
+        case 3:
+            if (n == 0) {
+                printf("List is empty!\n");
+            } else {
+                printf("List elements: ");
+                for (i = 0; i < n; i++)
+                    printf("%d ", arr[i]);
+                printf("\n");
+            }
+            break;
+
+        case 4:
+            return 0;
+
+        default:
+            printf("Invalid choice!\n");
+        }
+    }
+}
